@@ -9,11 +9,12 @@ from PyQt5.QtWidgets import (
     QAction,
     QLabel,
     QMessageBox,
+    QMenu,
     QCheckBox,
     QLineEdit,
 )
 from PyQt5.QtCore import Qt, QSize
-from PyQt5.QtGui import QFont
+from PyQt5.QtGui import QFont, QCursor
 
 
 class MyTableWidgetItem(QTableWidgetItem):
@@ -62,28 +63,37 @@ class TableWidget(QWidget):
         connectid = self.journalle.textChanged.connect(self.filter)
         connectid = self.titlele.textChanged.connect(self.filter)
         connectid = self.table.cellDoubleClicked.connect(self.itemDoubleClicked)
-        connectid = self.table.cellClicked.connect(self.itemClicked)
 
         self.table.setSortingEnabled(True)
         self.table.setAlternatingRowColors(True)
         self.table.verticalHeader().setVisible(False)
 
-    def itemClicked(self, row, column):
-        item = self.table.item(row, 0).text()
-        #btex = self.entries[""]
+        self.table.setContextMenuPolicy(Qt.CustomContextMenu)
+        connectid = self.table.customContextMenuRequested.connect(self.handleMenu)
+
+    def copyBtex(self):
+        btex = self.entries[self.selecteditemkey]["bibtex"]
+        QApplication.clipboard().setText(btex)
+
+    def handleMenu(self, pos):
+        self.selecteditemkey = self.table.item(self.table.itemAt(pos).row(), 0).text()
+        # self.table.itemAt(pos)
+        # print('column(%d)' % self.table.horizontalHeader().logicalIndexAt(pos))
+        menu = QMenu()
+        btexcopyaction = menu.addAction("Copy BibTex entry to Clipboard")
+        connectid = btexcopyaction.triggered.connect(self.copyBtex)
+        menu.exec_(QCursor.pos())
 
     def itemDoubleClicked(self, row, column):
-        if column>0:
+        if column > 0:
             return
-        fpdf = self.table.item(row, column).text()+".pdf"
+        fpdf = self.table.item(row, column).text() + ".pdf"
         try:
-            os.startfile(fpdf) # Only works on Windows
+            os.startfile(fpdf)  # Only works on Windows
         except FileNotFoundError:
             QMessageBox.warning(
-                    None, "Missing PDF file",
-                    "The file '%s' can't be found!"%fpdf,
-                )
-
+                None, "Missing PDF file", "The file '%s' can't be found!" % fpdf,
+            )
 
     def filter(self):
         wordsauthor = self.authorle.text().split() + [""]
@@ -105,8 +115,8 @@ class TableWidget(QWidget):
                     self.table.hideRow(i)
                     break
 
-    def populate(self, listazo):
-        self.entries = listazo
+    def populate(self, entries):
+        self.entries = entries
         items = ["id", "year", "citations", "author", "journal", "title"]
         numericitems = ["year", "citations"]
         alignments = [
@@ -119,7 +129,7 @@ class TableWidget(QWidget):
         ]
         widths = [150, 80, 90, 250, 250, 500]
         self.resize(sum(widths) + 50, 800)
-        self.table.setRowCount(len(listazo))
+        self.table.setRowCount(len(entries))
         self.table.setColumnCount(len(items))
         self.table.horizontalHeader().setFont(QFont("Arial", 9, QFont.Bold))
 
@@ -130,7 +140,8 @@ class TableWidget(QWidget):
             self.table.setHorizontalHeaderItem(col, QTableWidgetItem(key))
             self.table.setColumnWidth(col, widths[col])
 
-        for row, item_list in enumerate(listazo):
+        for row, item_key in enumerate(entries.keys()):
+            item_list = entries[item_key]
 
             for col, key in enumerate(items):
                 if key in numericitems:

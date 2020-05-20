@@ -18,7 +18,7 @@ def parse_bibfile(file):
             )
         sys.exit(1)
 
-    entries = []
+    entries = {}
 
     entry_blocks = [i for i in re.split("\n@", text) if not must_omit(i)]
 
@@ -73,6 +73,6 @@ def parse_bibfile(file):
 
         if entry_dict != {}:
             entry_dict["bibtex"] = entry
-            entries.append(entry_dict)
+            entries[entry_dict["id"]]=entry_dict
 
     return entries
