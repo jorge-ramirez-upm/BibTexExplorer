@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/Images">
+        <file>icons/Everaldo-Desktoon-Library.ico</file>
+        <file>icons/icons8-help-96.png</file>
+        <file>icons/icons8-available-updates-96.png</file>
+    </qresource>
+</RCC>

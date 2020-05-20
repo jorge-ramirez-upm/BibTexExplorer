@@ -27,9 +27,9 @@ def parse_bibfile(file):
 
     for entry in entry_blocks:
         entry_dict = {}
-        i1 = re.match("(?P<type>.*){(?P<id>.*),", entry)
+        i1 = re.match("(?P<type>.*){(?P<key>.*),", entry)
         if i1:
-            entry_dict["id"] = i1.group("id")
+            entry_dict["key"] = i1.group("key")
             entry_dict["type"] = i1.group("type")
 
         items = ["doi", "journal"]
@@ -73,6 +73,6 @@ def parse_bibfile(file):
 
         if entry_dict != {}:
             entry_dict["bibtex"] = entry
-            entries[entry_dict["id"]]=entry_dict
+            entries[entry_dict["key"]]=entry_dict
 
     return entries

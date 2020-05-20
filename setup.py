@@ -37,7 +37,7 @@ def get_directory_structure(rootdir):
     return build_tree(dir, "")
 
 
-with open("README.rst", "r") as fh:
+with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
@@ -52,7 +52,7 @@ setup(
 #    packages=find_packages(),
     packages=["BibTexExplorer"],
 #    py_modules = ["BibTexExplorer"],
-#    package_data={"": ["*.py", "*.ui", "*.qrc", "*.npy", "*.so", "*.npz"]},
+#    package_data={"": ["*.py", "*.ui", "*.qrc", "*.npy", "*.so", "*.npz", "*.ico"]},
     install_requires=requirements,
     entry_points={
         "gui_scripts": [
