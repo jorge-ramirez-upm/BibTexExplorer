@@ -12,10 +12,11 @@ from PyQt5.QtWidgets import (
     QMenu,
     QCheckBox,
     QLineEdit,
+    QShortcut,
     QSpinBox
 )
 from PyQt5.QtCore import Qt, QSize
-from PyQt5.QtGui import QFont, QCursor, QIcon
+from PyQt5.QtGui import QFont, QCursor, QIcon, QKeySequence
 from .BibTexExplorer_rc import *
 
 
@@ -41,7 +42,8 @@ class TableWidget(QWidget):
         tmpfont = QFont()
         tmpfont.setBold(True)
 
-        tmp = QLabel("From", self)
+        tmp = QLabel("<u>F</u>rom", self)
+        tmp.setTextFormat(Qt.RichText);
         tmp.setToolTip("From this year")
         tmp.setFont(tmpfont)
         tb.addWidget(tmp)
@@ -49,10 +51,13 @@ class TableWidget(QWidget):
         self.fromyear.setMinimum(1850)
         self.fromyear.setMaximum(2030)
         self.fromyear.setValue(1850)
+        scfromyear = QShortcut(QKeySequence("Alt+F"), self)
+        scfromyear.activated.connect(self.fromyear.setFocus)
         tb.addWidget(self.fromyear)
         tb.addSeparator()
 
-        tmp = QLabel("To", self)
+        tmp = QLabel("T<u>o</u>", self)
+        tmp.setTextFormat(Qt.RichText);
         tmp.setToolTip("To this year")
         tmp.setFont(tmpfont)
         tb.addWidget(tmp)
@@ -60,28 +65,36 @@ class TableWidget(QWidget):
         self.toyear.setMinimum(1850)
         self.toyear.setMaximum(2030)
         self.toyear.setValue(2030)
+        sctoyear = QShortcut(QKeySequence("Alt+O"), self)
+        sctoyear.activated.connect(self.toyear.setFocus)
         tb.addWidget(self.toyear)
         tb.addSeparator()
 
-        tmp = QLabel("Author", self)
+        tmp = QLabel("<u>A</u>uthor", self)
         tmp.setFont(tmpfont)
         tmp.setToolTip("Space separated author names (may be incomplete)")
         tb.addWidget(tmp)
         self.authorle = QLineEdit(self)
+        scauthor = QShortcut(QKeySequence("Alt+A"), self)
+        scauthor.activated.connect(self.authorle.setFocus)
         tb.addWidget(self.authorle)
         tb.addSeparator()
-        tmp = QLabel("Journal", self)
+        tmp = QLabel("<u>J</u>ournal", self)
         tmp.setToolTip("Space separated journal name words (may be incomplete)")
         tmp.setFont(tmpfont)
         tb.addWidget(tmp)
         self.journalle = QLineEdit(self)
+        scjournal = QShortcut(QKeySequence("Alt+J"), self)
+        scjournal.activated.connect(self.journalle.setFocus)
         tb.addWidget(self.journalle)
         tb.addSeparator()
-        tmp = QLabel("Title", self)
+        tmp = QLabel("<u>T</u>itle", self)
         tmp.setToolTip("Space separated title words (may be incomplete)")
         tmp.setFont(tmpfont)
         tb.addWidget(tmp)
         self.titlele = QLineEdit(self)
+        sctitle = QShortcut(QKeySequence("Alt+T"), self)
+        sctitle.activated.connect(self.titlele.setFocus)
         tb.addWidget(self.titlele)
         self.actionreset = tb.addAction(
             QIcon(":/Images/icons/icons8-available-updates-96.png"), "Reset Filters"
