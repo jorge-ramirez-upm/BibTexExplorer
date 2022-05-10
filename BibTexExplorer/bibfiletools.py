@@ -9,7 +9,8 @@ def must_omit(i):
 
 def parse_bibfile(file):
     try:
-        with open(file, "r") as f:
+        #with open(file, "r", encoding="utf8") as f:
+        with open(file, "r", encoding="latin1") as f:
             text = f.read()
     except FileNotFoundError:
         QMessageBox.warning(

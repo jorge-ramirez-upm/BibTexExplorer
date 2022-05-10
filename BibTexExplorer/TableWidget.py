@@ -179,15 +179,15 @@ class TableWidget(QWidget):
         for i in range(self.table.rowCount()):
             self.table.showRow(i)
             for word in wordsauthor:
-                if word not in self.table.item(i, 3).text():
+                if word.upper() not in self.table.item(i, 3).text().upper():
                     self.table.hideRow(i)
                     break
             for word in wordsjournal:
-                if word not in self.table.item(i, 4).text():
+                if word.upper() not in self.table.item(i, 4).text().upper():
                     self.table.hideRow(i)
                     break
             for word in wordstitle:
-                if word not in self.table.item(i, 5).text():
+                if word.upper() not in self.table.item(i, 5).text().upper():
                     self.table.hideRow(i)
                     break
             year = int(self.table.item(i, 1).text())
