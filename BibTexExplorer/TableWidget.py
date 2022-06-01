@@ -1,5 +1,5 @@
 import os
-from PyQt6.QtWidgets import (
+from PySide6.QtWidgets import (
     QTableWidgetItem,
     QTableWidget,
     QApplication,
@@ -13,8 +13,8 @@ from PyQt6.QtWidgets import (
     QLineEdit,
     QSpinBox
 )
-from PyQt6.QtCore import Qt, QSize
-from PyQt6.QtGui import QFont, QCursor, QIcon, QKeySequence, QAction, QShortcut
+from PySide6.QtCore import Qt, QSize
+from PySide6.QtGui import QFont, QCursor, QIcon, QKeySequence, QAction, QShortcut
 from .BibTexExplorer_rc import *
 
 
