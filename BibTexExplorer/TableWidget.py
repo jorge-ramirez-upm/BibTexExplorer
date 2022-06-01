@@ -1,28 +1,26 @@
 import os
-from PyQt5.QtWidgets import (
+from PyQt6.QtWidgets import (
     QTableWidgetItem,
     QTableWidget,
     QApplication,
     QWidget,
     QVBoxLayout,
     QToolBar,
-    QAction,
     QLabel,
     QMessageBox,
     QMenu,
     QCheckBox,
     QLineEdit,
-    QShortcut,
     QSpinBox
 )
-from PyQt5.QtCore import Qt, QSize
-from PyQt5.QtGui import QFont, QCursor, QIcon, QKeySequence
+from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtGui import QFont, QCursor, QIcon, QKeySequence, QAction, QShortcut
 from .BibTexExplorer_rc import *
 
 
 class MyTableWidgetItem(QTableWidgetItem):
     def __init__(self, number):
-        QTableWidgetItem.__init__(self, number, QTableWidgetItem.UserType)
+        QTableWidgetItem.__init__(self, number, QTableWidgetItem.ItemType.UserType)
         self.__number = number
 
     def __lt__(self, other):
@@ -43,7 +41,7 @@ class TableWidget(QWidget):
         tmpfont.setBold(True)
 
         tmp = QLabel("<u>F</u>rom", self)
-        tmp.setTextFormat(Qt.RichText);
+        tmp.setTextFormat(Qt.TextFormat.RichText);
         tmp.setToolTip("From this year")
         tmp.setFont(tmpfont)
         tb.addWidget(tmp)
@@ -57,7 +55,7 @@ class TableWidget(QWidget):
         tb.addSeparator()
 
         tmp = QLabel("T<u>o</u>", self)
-        tmp.setTextFormat(Qt.RichText);
+        tmp.setTextFormat(Qt.TextFormat.RichText);
         tmp.setToolTip("To this year")
         tmp.setFont(tmpfont)
         tb.addWidget(tmp)
@@ -99,12 +97,13 @@ class TableWidget(QWidget):
         self.actionreset = tb.addAction(
             QIcon(":/Images/icons/icons8-available-updates-96.png"), "Reset Filters"
         )
-        self.actionreset.setShortcut(Qt.CTRL + Qt.Key_R)
+        #self.actionreset.setShortcut(Qt.CTRL + Qt.Key_R)
+        self.actionreset.setShortcut(Qt.Key.Key_Control + Qt.Key.Key_R)
         connectid = self.actionreset.triggered.connect(self.reset)
         self.actionhelp = tb.addAction(
             QIcon(":/Images/icons/icons8-help-96.png"), "BibTex Explorer Help"
         )
-        self.actionhelp.setShortcut(Qt.Key_F1)
+        self.actionhelp.setShortcut(Qt.Key.Key_F1)
         connectid = self.actionhelp.triggered.connect(self.about)
 
         vbox = QVBoxLayout(self)
@@ -122,7 +121,7 @@ class TableWidget(QWidget):
         self.table.setAlternatingRowColors(True)
         self.table.verticalHeader().setVisible(False)
 
-        self.table.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         connectid = self.table.customContextMenuRequested.connect(self.handleMenu)
 
     def about(self):
@@ -199,23 +198,23 @@ class TableWidget(QWidget):
         items = ["key", "year", "citations", "author", "journal", "title"]
         numericitems = ["year", "citations"]
         alignments = [
-            Qt.AlignHCenter,
-            Qt.AlignHCenter,
-            Qt.AlignHCenter,
-            Qt.AlignLeft,
-            Qt.AlignLeft,
-            Qt.AlignLeft,
+            Qt.AlignmentFlag.AlignHCenter,
+            Qt.AlignmentFlag.AlignHCenter,
+            Qt.AlignmentFlag.AlignHCenter,
+            Qt.AlignmentFlag.AlignLeft,
+            Qt.AlignmentFlag.AlignLeft,
+            Qt.AlignmentFlag.AlignLeft,
         ]
         widths = [150, 80, 90, 250, 250, 500]
         self.resize(sum(widths) + 50, 800)
         self.table.setRowCount(len(entries))
         self.table.setColumnCount(len(items))
-        self.table.horizontalHeader().setFont(QFont("Arial", 9, QFont.Bold))
+        self.table.horizontalHeader().setFont(QFont("Arial", 9, QFont.Weight.Bold))
 
         for col, key in enumerate(items):
             item = QTableWidgetItem(key)
             item.setTextAlignment(alignments[col])
-            item.setFont(QFont("Times", 20, QFont.Bold))
+            item.setFont(QFont("Times", 20, QFont.Weight.Bold))
             self.table.setHorizontalHeaderItem(col, QTableWidgetItem(key))
             self.table.setColumnWidth(col, widths[col])
 
@@ -234,9 +233,9 @@ class TableWidget(QWidget):
                     except:
                         newitem = QTableWidgetItem("-")
                 newitem.setTextAlignment(alignments[col])
-                newitem.setFlags(Qt.ItemIsEnabled)
+                newitem.setFlags(Qt.ItemFlag.ItemIsEnabled)
                 self.table.setItem(row, col, newitem)
-        self.table.sortItems(2, Qt.DescendingOrder)
+        self.table.sortItems(2, Qt.SortOrder.DescendingOrder)
         self.table.setStyleSheet(
             "alternate-background-color: lightgray; background-color: white;"
         )

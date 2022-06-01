@@ -2,7 +2,7 @@ import re
 import os
 import sys
 import latexcodec
-from PyQt5.QtWidgets import QApplication, QMessageBox
+from PyQt6.QtWidgets import QApplication, QMessageBox
 
 def must_omit(i):
     return re.match("comment", i) or re.match("%%", i)
